@@ -1,7 +1,7 @@
 import asyncio
 import os
-from discord.utils import setup_logging
-from core import Bot
+import logging
+from discord.ext import commands  
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -10,9 +10,15 @@ load_dotenv()
 # Get the Discord bot token from environment variables
 token = os.environ.get("TOKEN")
 
+# Set up logging for the bot
+logging.basicConfig(level=logging.INFO)
+
+# Define the bot class
+class Bot(commands.Bot):
+    def __init__(self):
+        super().__init__(command_prefix="!")  
+
 async def main() -> None:
-    # Set up logging for the bot
-    setup_logging()
     async with Bot() as bot:
         # Start the bot and reconnect if disconnected
         await bot.start(token=token, reconnect=True)
@@ -21,4 +27,10 @@ if __name__ == "__main__":
     if token is None:
         print("Error: TOKEN environment variable not set.")
     else:
-        asyncio.run(main())
+        try:
+            asyncio.run(main())
+        except KeyboardInterrupt:
+            print("Bot stopped.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
