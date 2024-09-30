@@ -3,7 +3,7 @@ import os
 from discord.utils import setup_logging
 from core import Bot
 from dotenv import load_dotenv
-
+ 
 # Load environment variables from .env file
 load_dotenv()
 
